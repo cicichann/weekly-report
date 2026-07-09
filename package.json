@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "sync": "node sync-commits.js",
+    "report": "node report.js",
+    "weekly": "npm run sync && npm run report"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  }
+}
