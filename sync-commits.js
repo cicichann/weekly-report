@@ -45,8 +45,9 @@ if (!GITLAB_TOKEN) {
 }
 
 const args = parseArgs(process.argv.slice(2))
-const after = args.after || getDefaultAfter()
-const before = args.before || getDefaultBefore()
+const defaultRange = getDefaultRange()
+const after = normalizeDateArgument(args.after || defaultRange.after)
+const before = normalizeDateArgument(args.before || defaultRange.before)
 const shouldUpdateExcel = args.excel !== 'false'
 
 const excludedEvents = []
@@ -67,6 +68,8 @@ async function main() {
     after,
     before
   })
+
+  console.log(`GitLab 查询边界：after=${after}，before=${before}`)
 
   console.log(`获取到 GitLab events：${events.length} 条`)
 
@@ -107,6 +110,29 @@ function parseArgs(argv) {
   return result
 }
 
+function getDefaultRange() {
+  const now = new Date()
+  const day = now.getDay() || 7
+
+  // 本周一
+  const monday = new Date(now)
+  monday.setHours(0, 0, 0, 0)
+  monday.setDate(now.getDate() - day + 1)
+
+  // GitLab after 不包含边界，因此取本周一的前一天
+  const afterDate = new Date(monday)
+  afterDate.setDate(monday.getDate() - 1)
+
+  // GitLab before 不包含边界，因此取本周日的后一天
+  const beforeDate = new Date(monday)
+  beforeDate.setDate(monday.getDate() + 7)
+
+  return {
+    after: formatDateOnly(afterDate),
+    before: formatDateOnly(beforeDate)
+  }
+}
+
 function getDefaultAfter() {
   const now = new Date()
   const day = now.getDay() || 7
@@ -144,7 +170,7 @@ function formatMonthDay(dateStr) {
     return ''
   }
 
-  return `${date.getMonth() + 1}-${String(date.getDate()).padStart(2, '0')}`
+  return `${date.getMonth() + 1}/${String(date.getDate()).padStart(2, '0')}`
 }
 
 async function gitlabGet(apiPath, query = {}) {
@@ -390,14 +416,36 @@ function buildWeeklyUniqueKey(commit, parsed) {
   return `${group}_${project}_${description}`
 }
 
+function normalizeDateArgument(value) {
+  return String(value || '')
+    .trim()
+    .replace(/\//g, '-')
+}
+
 function isCommitInRange(commit, after, before) {
   const dateStr = commit.committed_date || commit.created_at
 
   if (!dateStr) return false
 
+  const normalizedAfter = normalizeDateArgument(after)
+  const normalizedBefore = normalizeDateArgument(before)
+
   const commitTime = new Date(dateStr)
-  const afterTime = new Date(`${after}T00:00:00+08:00`)
-  const beforeTime = new Date(`${before}T00:00:00+08:00`)
+  const afterTime = new Date(`${normalizedAfter}T00:00:00.000+08:00`)
+  const beforeTime = new Date(`${normalizedBefore}T00:00:00.000+08:00`)
+
+  if (
+    Number.isNaN(commitTime.getTime()) ||
+    Number.isNaN(afterTime.getTime()) ||
+    Number.isNaN(beforeTime.getTime())
+  ) {
+    console.warn('日期解析失败：', {
+      committedDate: dateStr,
+      after,
+      before
+    })
+    return false
+  }
 
   return commitTime > afterTime && commitTime < beforeTime
 }
@@ -685,6 +733,22 @@ function getExistingExcelKeys(ws) {
   return keys
 }
 
+function parseLocalDate(value) {
+  const normalized = String(value || '')
+    .trim()
+    .replace(/\//g, '-')
+  const match = normalized.match(/^(\d{4})-(\d{2})-(\d{2})$/)
+
+  if (!match) {
+    return null
+  }
+
+  const [, year, month, day] = match
+
+  // 使用本地时间构造，避免 new Date('2026-07-17') 被按 UTC 解析后产生日期偏移
+  return new Date(Number(year), Number(month) - 1, Number(day))
+}
+
 async function updateWeeklyExcel(records) {
   const excelPath = resolveProjectFile(excelConfig.file)
 
@@ -720,12 +784,16 @@ async function updateWeeklyExcel(records) {
 
     const row = ws.getRow(rowNumber)
 
-    row.getCell(1).value = rowNumber - 1
+    const seqCell = row.getCell(1)
+    seqCell.value = rowNumber - (excelConfig.startRow || 2) + 1
+    seqCell.numFmt = '0'
+
     row.getCell(2).value = record.group || ''
-    row.getCell(3).value = record.resolveDate
-      ? new Date(`${record.resolveDate}T00:00:00+08:00`)
-      : null
-    row.getCell(3).numFmt = 'yyyy-mm-dd'
+
+    const dateCell = row.getCell(3)
+    dateCell.value = record.resolveDate ? parseLocalDate(record.resolveDate) : null
+    dateCell.numFmt = 'yyyy/mm/dd'
+
     row.getCell(4).value = record.project || ''
     row.getCell(5).value = shouldSkipType(record) ? '' : record.typeLabel || ''
     row.getCell(6).value = record.jira || ''

@@ -153,7 +153,7 @@ function readGitItems() {
   const content = JSON.parse(fs.readFileSync(jsonPath, 'utf8'))
   const records = Array.isArray(content) ? content : content.records || []
 
-  return records.map(normalizeGitItem, index).filter(hasReportContent)
+  return records.map(normalizeGitItem).filter(hasReportContent)
 }
 
 function normalizeGitItem(item, index) {
