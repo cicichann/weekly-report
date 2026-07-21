@@ -8,6 +8,7 @@ node_modules/
 # output
 weekly-output/
 output/
+data/
 
 # logs
 *.log

@@ -1,0 +1,207 @@
+{
+  "timezone": "Asia/Shanghai",
+  "gitlab": {
+    "baseUrl": "http://gitlab.devdemo.trs.net.cn/",
+    "userId": "140",
+    "tokenEnv": "GITLAB_TOKEN",
+    "requestTimeoutMs": 15000,
+    "maxRetries": 3
+  },
+  "authors": {
+    "names": ["chen.xi"],
+    "emails": ["chen.xi@trs.com.cn"]
+  },
+  "projects": {
+    "21": {
+      "name": "海云",
+      "group": "海云",
+      "product": "cd-app",
+      "issueType": "需求",
+      "status": "已完成"
+    },
+    "37": {
+      "name": "问政互动",
+      "group": "问政互动",
+      "product": "wzhd-app",
+      "issueType": "需求",
+      "status": "已完成"
+    },
+    "665": {
+      "name": "问政互动个人中心",
+      "group": "问政互动",
+      "product": "igi-personalcenter",
+      "issueType": "需求",
+      "status": "已完成"
+    },
+    "99": {
+      "name": "资源库",
+      "group": "资源库",
+      "product": "unified.info.res.fe",
+      "issueType": "需求",
+      "status": "已完成"
+    },
+    "147": {
+      "name": "WCM_USE内嵌前端（uirb-tran-app）",
+      "group": "资源库",
+      "product": "trs-mapping",
+      "issueType": "需求",
+      "status": "已完成"
+    },
+    "104": {
+      "name": "监测云",
+      "group": "监测云",
+      "product": "webmonitor-app",
+      "issueType": "需求",
+      "status": "已完成"
+    },
+    "246": {
+      "name": "海星",
+      "group": "海星",
+      "product": "new-media-app",
+      "issueType": "需求",
+      "status": "已完成"
+    },
+    "289": {
+      "name": "海星问卷",
+      "group": "海星",
+      "product": "new-media-wenjuan",
+      "issueType": "需求",
+      "status": "已完成"
+    },
+    "341": {
+      "name": "智能检索",
+      "group": "智能检索",
+      "product": "irs-app",
+      "issueType": "需求",
+      "status": "已完成"
+    },
+    "353": {
+      "name": "智能检索web端",
+      "group": "智能检索",
+      "product": "irs-c-web",
+      "issueType": "需求",
+      "status": "已完成"
+    },
+    "689": {
+      "name": "贵州APP-运营管理平台",
+      "group": "贵州APP",
+      "product": "bapp-ops",
+      "issueType": "需求",
+      "status": "已完成"
+    },
+    "691": {
+      "name": "贵州APP-服务号管理平台",
+      "group": "贵州APP",
+      "product": "bapp-service",
+      "issueType": "需求",
+      "status": "已完成"
+    },
+    "692": {
+      "name": "组件库",
+      "group": "组件库",
+      "product": "trs-ui-web",
+      "issueType": "需求",
+      "status": "已完成"
+    },
+    "836": {
+      "name": "政策审核平台",
+      "group": "审核平台",
+      "product": "policy-review-app",
+      "issueType": "需求",
+      "status": "已完成"
+    },
+    "879": {
+      "name": "数据审核平台",
+      "group": "审核平台",
+      "product": "data-review-app",
+      "issueType": "需求",
+      "status": "已完成"
+    },
+    "838": {
+      "name": "网脉",
+      "group": "其他",
+      "product": "from-svn",
+      "issueType": "需求",
+      "status": "已完成"
+    },
+    "845": {
+      "name": "云哨APP",
+      "group": "其他",
+      "product": "ys-hybrid-app",
+      "issueType": "需求",
+      "status": "已完成"
+    },
+    "1020": {
+      "name": "图表绘制（chart-app）",
+      "group": "图表绘制",
+      "product": "chart-app",
+      "issueType": "需求",
+      "status": "已完成"
+    },
+    "1022": {
+      "name": "图表绘制中间件（mcp-server-chart）",
+      "group": "图表绘制",
+      "product": "mcp-server-chart",
+      "issueType": "需求",
+      "status": "已完成"
+    },
+    "1094": {
+      "name": "动态本体",
+      "group": "动态本体一体化平台",
+      "product": "doops-app",
+      "issueType": "需求",
+      "status": "已完成"
+    }
+  },
+  "groupOrder": [
+    "海云",
+    "动态本体",
+    "问政互动",
+    "海星",
+    "智能检索",
+    "监测云",
+    "资源库",
+    "网脉"
+  ],
+  "defaults": {
+    "group": "未分类",
+    "product": "待确认",
+    "issueType": "需求",
+    "status": "已完成"
+  },
+  "statusColorMap": {
+    "已完成": "#00b14d",
+    "处理中": "#04b0f1",
+    "待处理": "#4472c6",
+    "已拒绝": "#fcc102"
+  },
+  "typeColorMap": {
+    "需求": "#92d04f",
+    "定制化": "#fcc102",
+    "漏洞": "#c10002",
+    "安全漏洞": "#c10002",
+    "低版本补丁": "#c10002",
+    "咨询": "#0071c1",
+    "部署": "#04b0f1"
+  },
+  "validation": {
+    "requireProjectMapping": true,
+    "allowEmpty": false,
+    "failOnUnmatchedAuthor": false
+  },
+  "excel": {
+    "templatePath": "templates/weekly-report.xlsx",
+    "manualInputPath": false,
+    "sheetName": "当周数据维护",
+    "headerRow": 1,
+    "endRow": 100,
+    "dateFormat": "yyyy/mm/dd"
+  },
+  "paths": {
+    "dataDir": "data",
+    "outputDir": "output"
+  },
+  "filters": {
+    "excludeMergeCommits": true
+  }
+}

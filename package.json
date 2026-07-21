@@ -1,10 +1,24 @@
 {
+  "name": "weekly-report-pipeline",
+  "version": "1.0.0",
+  "private": true,
+  "description": "可重复执行的 GitLab 提交采集与 Excel/HTML 周报生成流水线",
+  "main": "src/pipeline.js",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=14.21"
+  },
   "scripts": {
-    "sync": "node sync-commits.js",
-    "report": "node report.js",
-    "weekly": "npm run sync && npm run report"
+    "generate": "node cli.js generate",
+    "fetch": "node cli.js fetch",
+    "validate": "node cli.js validate",
+    "render": "node cli.js render",
+    "test": "node test/run-tests.js"
   },
   "dependencies": {
     "exceljs": "^4.4.0"
+  },
+  "overrides": {
+    "uuid": "^11.1.1"
   }
 }
